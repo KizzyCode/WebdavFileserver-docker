@@ -1,0 +1,3 @@
+# Ignore macOS clutter
+.DS_Store
+/example/webroot/._*

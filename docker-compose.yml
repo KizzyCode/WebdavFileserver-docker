@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  thttpd:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./example/webroot:/mnt
+      - ./example/lighttpd.auth:/etc/lighttpd.auth:ro
