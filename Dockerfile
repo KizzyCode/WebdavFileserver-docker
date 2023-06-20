@@ -17,7 +17,7 @@ RUN make install -j8
 # Build the real container
 FROM alpine:latest
 
-RUN apk add --no-cache libxml2 pcre2 shadow sqlite-dev util-linux
+RUN apk add --no-cache libgcc libxml2 pcre2 shadow sqlite-dev util-linux
 RUN adduser -S -H -D -u 1000 -s /sbin/nologin www-data
 
 COPY --from=buildenv /usr/lib/lighttpd /usr/lib/lighttpd
