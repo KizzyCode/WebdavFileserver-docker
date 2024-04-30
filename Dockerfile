@@ -2,15 +2,16 @@
 FROM alpine:latest as buildenv
 WORKDIR /root
 
-RUN apk add --no-cache build-base curl libxml2-dev pcre2-dev sqlite-dev util-linux-dev
+RUN apk add --no-cache autoconf automake build-base curl libtool libxml2-dev pcre2-dev sqlite-dev util-linux-dev
 
-RUN VERSION=`curl -L https://download.lighttpd.net/lighttpd/releases-1.4.x/latest.txt | tr -cd '[:digit:]\.'` \
-    && curl -L https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-$VERSION.tar.xz | tar -Jxf - \
-    && mv lighttpd-$VERSION lighttpd-latest
+RUN VERSION=`curl -L https://download.lighttpd.net/lighttpd/releases-1.4.x/latest.txt` \
+    && curl -L https://download.lighttpd.net/lighttpd/releases-1.4.x/$VERSION.tar.xz | tar -Jxf - \
+    && mv $VERSION lighttpd-latest
 
-RUN cd ./lighttpd-latest \
-    && ./configure --prefix=/usr --libdir=/usr/lib/lighttpd --with-sqlite --with-webdav-locks --with-webdav-props \
-    && make install -j8
+WORKDIR /root/lighttpd-latest
+RUN ./autogen.sh
+RUN ./configure --prefix=/usr --libdir=/usr/lib/lighttpd --with-sqlite --with-webdav-locks --with-webdav-props
+RUN make install -j8
 
 
 # Build the real container
