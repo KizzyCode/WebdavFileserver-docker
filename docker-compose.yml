@@ -1,9 +1,20 @@
-version: "3.9"
 services:
   lighttpd-webdav:
     build:
       context: ./
       dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./example/webroot:/mnt
+      - ./example/lighttpd.auth:/etc/lighttpd.auth:ro
+
+  lighttpd-webdav-cgi:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        LIGHTTPD_CONFIG: ./files/lighttpd-cgi.conf
     ports:
       - "127.0.0.1:8080:8080"
     volumes:
