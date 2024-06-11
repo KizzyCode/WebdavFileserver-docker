@@ -4,8 +4,8 @@ WORKDIR /root
 
 RUN apk add --no-cache autoconf automake build-base curl libtool libxml2-dev pcre2-dev sqlite-dev util-linux-dev
 
-RUN VERSION=`curl -L https://download.lighttpd.net/lighttpd/releases-1.4.x/latest.txt` \
-    && curl -L https://download.lighttpd.net/lighttpd/releases-1.4.x/$VERSION.tar.xz | tar -Jxf - \
+RUN VERSION=`curl --fail --retry 600 --location https://download.lighttpd.net/lighttpd/releases-1.4.x/latest.txt` \
+    && curl --fail --retry 600 --location https://download.lighttpd.net/lighttpd/releases-1.4.x/$VERSION.tar.xz | tar -Jxf - \
     && mv $VERSION lighttpd-latest
 
 WORKDIR /root/lighttpd-latest
@@ -23,7 +23,8 @@ RUN adduser -S -H -D -u 1000 -s /sbin/nologin www-data
 COPY --from=buildenv /usr/lib/lighttpd /usr/lib/lighttpd
 COPY --from=buildenv /usr/sbin/lighttpd /usr/sbin/lighttpd
 
-COPY ./files/lighttpd.conf /etc/lighttpd.conf
+ARG LIGHTTPD_CONFIG=./files/lighttpd.conf
+COPY ${LIGHTTPD_CONFIG} /etc/lighttpd.conf
 RUN mkdir /var/lighttpd \
     && chown www-data /var/lighttpd
 
