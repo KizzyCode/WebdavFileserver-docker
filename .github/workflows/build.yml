@@ -43,4 +43,4 @@ jobs:
           tags: "${{ env.REGISTRY }}/${{ env.IMAGE_TAG }}"
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           build-args: |
-            LIGHTTPD_CONFIG="./files/lighttpd.conf"
+            LIGHTTPD_CONFIG=./files/lighttpd.conf
