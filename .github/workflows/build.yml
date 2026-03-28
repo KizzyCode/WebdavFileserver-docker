@@ -13,6 +13,7 @@ env:
 
 jobs:
   build-and-push-image:
+    if: github.ref == 'refs/heads/master'
     timeout-minutes: 120
     runs-on: ubuntu-latest
 
